@@ -9,7 +9,7 @@
         
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>implicit - Fit</title>
+	<title>reverse_compress - Fit</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -120,8 +120,8 @@
                                 <a href="../flow/index.html">flow</a>
                             </li>
                         
-                            <li class="active">
-                                <a href="index.html">implicit</a>
+                            <li >
+                                <a href="../implicit/index.html">implicit</a>
                             </li>
                         
                             <li >
@@ -164,8 +164,8 @@
                                 <a href="../reveal/index.html">reveal</a>
                             </li>
                         
-                            <li >
-                                <a href="../reverse_compress/index.html">reverse_compress</a>
+                            <li class="active">
+                                <a href="index.html">reverse_compress</a>
                             </li>
                         
                             <li >
@@ -275,12 +275,12 @@
                 
                 
                 <li >
-                    <a rel="next" href="../flow/index.html">
+                    <a rel="next" href="../reveal/index.html">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
                 <li >
-                    <a rel="prev" href="../indirect/index.html">
+                    <a rel="prev" href="../static/index.html">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -306,7 +306,7 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#implicit">implicit</a></li>
+        <li class="main active"><a href="#reverse_compress">reverse_compress</a></li>
         
             <li><a href="#description">Description</a></li>
         
@@ -321,48 +321,40 @@
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="implicit">implicit</h1>
+<h1 id="reverse_compress">reverse_compress</h1>
 <h2 id="description">Description</h2>
-<p>The <code>implicit</code> adaptor is a static function adaptor that uses the type
-that the return value can be converted to in order to determine the type
-of the template parameter. In essence, it will deduce the type for the
-template parameter using the type of variable the result is assigned to.
-Since it is a static function adaptor, the function must be default
-constructible.</p>
+<p>The <code>reverse_compress</code> function adaptor uses a binary function to apply a
+reverse fold(ie right fold in functional programming terms) operation to
+the arguments passed to the function. Additionally, an optional initial
+state can be provided, otherwise the first argument is used as the initial
+state.</p>
+<p>The arguments to the binary function, take first the state and then the
+argument.</p>
 <h2 id="synopsis">Synopsis</h2>
-<pre><code>template&lt;template &lt;class...&gt; class F&gt;
-class implicit&lt;F&gt;;
+<pre><code>template&lt;class F, class State&gt;
+constexpr reverse_compress_adaptor&lt;F, State&gt; reverse_compress(F f, State s);
+
+template&lt;class F&gt;
+constexpr reverse_compress_adaptor&lt;F&gt; reverse_compress(F f);
 </code></pre>
 <h2 id="requirements">Requirements</h2>
-<p>F must be a template class, that is a:</p>
-<pre><code>FunctionObject
-DefaultConstructible
+<p>State must be:</p>
+<pre><code>MoveConstructible
+</code></pre>
+<p>F must be:</p>
+<pre><code>BinaryFunctionObject
+MoveConstructible
 </code></pre>
 <h2 id="example">Example</h2>
-<pre><code>template&lt;class T&gt;
-struct auto_caster
+<pre><code>struct max_f
 {
-    template&lt;class U&gt;
-    T operator()(U x)
+    template&lt;class T, class U&gt;
+    constexpr T operator()(T x, U y) const
     {
-        return T(x);
+        return x &gt; y ? x : y;
     }
 };
-
-implicit&lt;auto_caster&gt; auto_cast = {};
-
-struct auto_caster_foo
-{
-    int i;
-    explicit auto_caster_foo(int i) : i(i) {}
-
-};
-
-float f = 1.5;
-int i = auto_cast(f);
-auto_caster_foo x = auto_cast(1);
-assert(1 == i);
-assert(1 == x.i);
+assert(fit::reverse_compress(max_f())(2, 3, 4, 5) == 5);
 </code></pre></div>
             
         </div>
@@ -383,7 +375,7 @@ assert(1 == x.i);
 
         <!--
         MkDocs version  : 0.12.2
-        Docs Build Date : 2015-06-14 10:52:19.079693
+        Docs Build Date : 2015-06-14 10:52:19.107013
         -->
     </body>
 </html>

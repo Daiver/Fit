@@ -9,7 +9,7 @@
         
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>implicit - Fit</title>
+	<title>construct - Fit</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -88,7 +88,7 @@
                 
                 
                 
-                    <li class="dropdown active">
+                    <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Adaptors <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
@@ -120,8 +120,8 @@
                                 <a href="../flow/index.html">flow</a>
                             </li>
                         
-                            <li class="active">
-                                <a href="index.html">implicit</a>
+                            <li >
+                                <a href="../implicit/index.html">implicit</a>
                             </li>
                         
                             <li >
@@ -185,7 +185,7 @@
                 
                 
                 
-                    <li class="dropdown">
+                    <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Functions <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
@@ -197,8 +197,8 @@
                                 <a href="../args/index.html">args</a>
                             </li>
                         
-                            <li >
-                                <a href="../construct/index.html">construct</a>
+                            <li class="active">
+                                <a href="index.html">construct</a>
                             </li>
                         
                             <li >
@@ -275,12 +275,12 @@
                 
                 
                 <li >
-                    <a rel="next" href="../flow/index.html">
+                    <a rel="next" href="../args/index.html">
                         <i class="fa fa-arrow-left"></i> Previous
                     </a>
                 </li>
                 <li >
-                    <a rel="prev" href="../indirect/index.html">
+                    <a rel="prev" href="../identity/index.html">
                         Next <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -306,7 +306,7 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#implicit">implicit</a></li>
+        <li class="main active"><a href="#construct">construct</a></li>
         
             <li><a href="#description">Description</a></li>
         
@@ -321,48 +321,25 @@
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="implicit">implicit</h1>
+<h1 id="construct">construct</h1>
 <h2 id="description">Description</h2>
-<p>The <code>implicit</code> adaptor is a static function adaptor that uses the type
-that the return value can be converted to in order to determine the type
-of the template parameter. In essence, it will deduce the type for the
-template parameter using the type of variable the result is assigned to.
-Since it is a static function adaptor, the function must be default
-constructible.</p>
+<p>The <code>construct</code> function returns a function object that will construct the
+object when the called. A template can also be givien, which it will
+deduce the parameters to the template.</p>
 <h2 id="synopsis">Synopsis</h2>
-<pre><code>template&lt;template &lt;class...&gt; class F&gt;
-class implicit&lt;F&gt;;
+<pre><code>template&lt;class T&gt;
+constexpr auto construct();
+
+template&lt;template&lt;class...&gt; class Template&gt;
+constexpr auto construct();
 </code></pre>
 <h2 id="requirements">Requirements</h2>
-<p>F must be a template class, that is a:</p>
-<pre><code>FunctionObject
-DefaultConstructible
+<p>T or Template must be:</p>
+<pre><code>MoveConstructible
 </code></pre>
 <h2 id="example">Example</h2>
-<pre><code>template&lt;class T&gt;
-struct auto_caster
-{
-    template&lt;class U&gt;
-    T operator()(U x)
-    {
-        return T(x);
-    }
-};
-
-implicit&lt;auto_caster&gt; auto_cast = {};
-
-struct auto_caster_foo
-{
-    int i;
-    explicit auto_caster_foo(int i) : i(i) {}
-
-};
-
-float f = 1.5;
-int i = auto_cast(f);
-auto_caster_foo x = auto_cast(1);
-assert(1 == i);
-assert(1 == x.i);
+<pre><code>auto v = fit::construct&lt;std::vector&lt;int&gt;&gt;()(5, 5);
+assert(v.size() == 5);
 </code></pre></div>
             
         </div>
@@ -383,7 +360,7 @@ assert(1 == x.i);
 
         <!--
         MkDocs version  : 0.12.2
-        Docs Build Date : 2015-06-14 10:52:19.079693
+        Docs Build Date : 2015-06-14 10:52:19.122161
         -->
     </body>
 </html>
